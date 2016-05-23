@@ -14,6 +14,7 @@ var keys = {
 };
 
 var obsticles = [];
+var numOfObsticles = 4;
 
 var queue;
 var preLoadText;
@@ -61,8 +62,7 @@ function startGame() {
 }
 
 function addObsticles (){
-    var i;
-    for (i = 0; i < 4; i++){
+    for (var i = 0; i < numOfObsticles; i++){
         var obsticle = new createjs.Bitmap("img/hexagon.png");
         obsticle.width = 128;
         obsticle.height = 129;
@@ -75,21 +75,24 @@ function addObsticles (){
 }
 
 function moveObsticles(){
-    var i;
     var length = obsticles.length;
+
+    //for (var i=0; i<numOfObsticles; i++){
+    //    obsticles[i].y+=2;
+    //}
 
     for(i = length-1; i>=0; i--){
         obsticles[i].y += 2;
+
         if(obsticles[i].y > stage.canvas.height){
             obsticles[i].y = -150;
             obsticles[i].x = Math.floor(Math.random() * (stage.canvas.width - obsticles[i].width));
         }
-    }
 
-    // need to make the score move, so the obstacles move faster
-    // if(score >= level * 20){
-    //      obsticles[i].y++;
-    //  }
+        //if(score >= length*score){
+        //    obsticles[i].y ++;
+        //}
+    }
 
 
     //if (obsticles[i].y > 700){
@@ -129,7 +132,6 @@ function fingerDown(e){
 }
 
 function moveHero() {
-    // need to make him not move outside of stage.canvas
     var stageLimit = stage.canvas.width;
 
     if (keys.rkd){
@@ -145,6 +147,25 @@ function moveHero() {
     }
 }
 
+function checkCollisions(){
+    var oLength = obsticles.length - 1;
+
+    for (var i=0; i<numOfObsticles; i++){
+        if(hitTest(obsticles[i], hero)){
+            console.log("Game Over");
+        }
+    }
+
+    //for (var o = oLength; o > 0; o--){
+    //    if(hitTest(obsticles[o], hero)){
+    //        console.log("Game Over");
+            // lives--; stopGame() moveHero()stop "break;"
+            //      obsticles.remove();
+
+    //   }
+    //}
+}
+
 function hitTest(rect1,rect2) {
     if ( rect1.x >= rect2.x + rect2.width
         || rect1.x + rect1.width <= rect2.x
@@ -154,20 +175,6 @@ function hitTest(rect1,rect2) {
         return false;
     }
     return true;
-}
-
-function checkCollisions(){
-    var o;
-    var oLength = obsticles.length - 1;
-
-    for (o = oLength; o > 0; o--){
-       if(hitTest(obsticles[o], hero)){
-          console.log("Game Over");
-            // lives--; stopGame() moveHero()stop "break;"
-      //      obsticles.remove();
-
-        }
-    }
 }
 
 function tock (e) {
