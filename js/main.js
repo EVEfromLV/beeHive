@@ -18,6 +18,7 @@ var numOfObsticles = 4;
 
 var queue;
 var preLoadText;
+var gameIsRunning = true;
 
 function preLoad(){
     stage = new createjs.Stage("beeHive");
@@ -148,22 +149,21 @@ function moveHero() {
 }
 
 function checkCollisions(){
-    var oLength = obsticles.length - 1;
-
     for (var i=0; i<numOfObsticles; i++){
         if(hitTest(obsticles[i], hero)){
             console.log("Game Over");
+            gameIsRunning=false;
+            gameOverText = new createjs.Text("Game Over", "70px Helvetica", "black");
+            gameOverText.x = stage.canvas.width-600;
+            gameOverText.y = stage.canvas.height/2.5;
+            stage.addChild(gameOverText);
+
+            //restartGame = new createjs.Text("TRY AGAIN", "30px Helvetica", "red");
+            //restartGame.x = stage.canvas.width-500;
+            //restartGame.y = stage.canvas.height/1.9;
+            //stage.addChild(restartGame);
+            }
         }
-    }
-
-    //for (var o = oLength; o > 0; o--){
-    //    if(hitTest(obsticles[o], hero)){
-    //        console.log("Game Over");
-            // lives--; stopGame() moveHero()stop "break;"
-            //      obsticles.remove();
-
-    //   }
-    //}
 }
 
 function hitTest(rect1,rect2) {
@@ -178,8 +178,10 @@ function hitTest(rect1,rect2) {
 }
 
 function tock (e) {
-    moveObsticles();
-    moveHero();
-    checkCollisions();
+   if(gameIsRunning===true){
+        moveObsticles();
+        moveHero();
+        checkCollisions();
+    }
     stage.update(e);
 }
