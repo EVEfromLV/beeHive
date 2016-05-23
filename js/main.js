@@ -57,19 +57,17 @@ function startGame() {
     window.addEventListener('keyup', fingerUp);
 
     addObsticles();
-    addObsticles();
-    addObsticles();
 
 }
 
 function addObsticles (){
     var i;
-    for (i = 0; i < level; i++){
+    for (i = 0; i < 4; i++){
         var obsticle = new createjs.Bitmap("img/hexagon.png");
         obsticle.width = 128;
         obsticle.height = 129;
 
-        obsticle.y = -150;
+        obsticle.y = stage.canvas.height;
         obsticle.x = Math.floor(Math.random() * (stage.canvas.width - obsticle.width));
         stage.addChild(obsticle);
         obsticles.push(obsticle);
@@ -78,7 +76,7 @@ function addObsticles (){
 
 function moveObsticles(){
     var i;
-    var length = obsticles.length -1;
+    var length = obsticles.length;
 
     for(i = length-1; i>=0; i--){
         obsticles[i].y += 2;
@@ -130,14 +128,20 @@ function fingerDown(e){
     }
 }
 
-function moveHero(){
+function moveHero() {
     // need to make him not move outside of stage.canvas
-    if(keys.rkd){
-        hero.x+=hero.speed;
+    var stageLimit = stage.canvas.width;
+
+    if (keys.rkd){
+        if (hero.x <= stageLimit-160) {
+            hero.x += hero.speed;
+        }
     }
 
-    if(keys.lkd){
-        hero.x-=hero.speed;
+    if (keys.lkd) {
+        if (hero.x > 10) {
+            hero.x -= hero.speed;
+        }
     }
 }
 
@@ -157,10 +161,10 @@ function checkCollisions(){
     var oLength = obsticles.length - 1;
 
     for (o = oLength; o > 0; o--){
-        if(hitTest(obsticles[o], hero)){
-            console.log("Game Over");
+       if(hitTest(obsticles[o], hero)){
+          console.log("Game Over");
             // lives--; stopGame() moveHero()stop "break;"
-            obsticles.remove();
+      //      obsticles.remove();
 
         }
     }
