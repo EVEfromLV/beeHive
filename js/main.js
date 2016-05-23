@@ -2,8 +2,8 @@
  * Created by IevaSilina on 19/05/16.
  */
 var stage;
-var level = 1;
 var score = 0;
+var scoreText;
 var hero;
 
 var keys = {
@@ -18,12 +18,16 @@ var numOfObsticles = 4;
 
 var queue;
 var preLoadText;
-var gameIsRunning = true;
+var gameIsRunning = false;
 
 function preLoad(){
     stage = new createjs.Stage("beeHive");
-    preLoadText = new createjs.Text("0%", "70px Helvetica", "black");
+
+    preLoadText = new createjs.Text("0%", "40px Helvetica", "brown");
     stage.addChild(preLoadText);
+    preLoadText.x = stage.canvas.width-490;
+    preLoadText.y = stage.canvas.height/3.1;
+
     queue = new createjs.LoadQueue(true);
     queue.on("progress", progressIs);
     queue.on("complete", startGame);
@@ -36,7 +40,6 @@ function preLoad(){
 }
 
 function progressIs(e) {
-    console.log(e.progress);
     preLoadText.text = Math.round(e.progress*100) + "%";
     stage.update();
 }
@@ -45,6 +48,17 @@ function startGame() {
     createjs.Ticker.setFPS(60);
     createjs.Ticker.addEventListener("tick", tock);
 
+    startBtn = new createjs.Text("Start Game", "60px Helvetica", "black");
+    stage.addChild(startBtn);
+    startBtn.x = stage.canvas.width-600;
+    startBtn.y = stage.canvas.height/2.5;
+    startBtn.addEventListener('click',
+        function(e){
+            stage.removeChild(e.target);
+            stage.removeChild(preLoadText);
+            gameIsRunning = true;
+    });
+
     hero = new createjs.Bitmap("img/bee.png");
     hero.width = 150;
     hero.height = 130;
@@ -52,13 +66,15 @@ function startGame() {
 
     stage.addChild(hero);
 
-    hero.x = stage.canvas.width/2;
+    hero.x = stage.canvas.width/2.3;
     hero.y = 620-hero.height;
 
     window.addEventListener('keydown', fingerDown);
     window.addEventListener('keyup', fingerUp);
 
     addObsticles();
+
+    scoreText = new createjs.Text("Score: 0", "50px Helvetica");
 
 }
 
@@ -151,7 +167,6 @@ function moveHero() {
 function checkCollisions(){
     for (var i=0; i<numOfObsticles; i++){
         if(hitTest(obsticles[i], hero)){
-            console.log("Game Over");
             gameIsRunning=false;
             gameOverText = new createjs.Text("Game Over", "70px Helvetica", "black");
             gameOverText.x = stage.canvas.width-600;
@@ -179,6 +194,7 @@ function hitTest(rect1,rect2) {
 
 function tock (e) {
    if(gameIsRunning===true){
+        score++;
         moveObsticles();
         moveHero();
         checkCollisions();
