@@ -57,13 +57,16 @@ function startGame() {
             stage.removeChild(e.target);
             stage.removeChild(preLoadText);
             gameIsRunning = true;
+
+            scoreText = new createjs.Text("Score: 0", "30px Helvetica", "black");
+            stage.addChild(scoreText);
+            scoreText.x = scoreText.y = 20;
     });
 
     hero = new createjs.Bitmap("img/bee.png");
     hero.width = 150;
     hero.height = 130;
     hero.speed = 20;
-
     stage.addChild(hero);
 
     hero.x = stage.canvas.width/2.3;
@@ -73,8 +76,6 @@ function startGame() {
     window.addEventListener('keyup', fingerUp);
 
     addObsticles();
-
-    scoreText = new createjs.Text("Score: 0", "50px Helvetica");
 
 }
 
@@ -195,6 +196,7 @@ function hitTest(rect1,rect2) {
 function tock (e) {
    if(gameIsRunning===true){
         score++;
+       scoreText.text = "Score: " +score;
         moveObsticles();
         moveHero();
         checkCollisions();
