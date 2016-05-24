@@ -48,10 +48,10 @@ function startGame() {
     createjs.Ticker.setFPS(60);
     createjs.Ticker.addEventListener("tick", tock);
 
-    startBtn = new createjs.Text("Start Game", "60px Helvetica", "black");
+    var startBtn = new createjs.Text("Start Game", "60px Helvetica", "black");
+    startBtn.x = stage.canvas.width - 600;
+    startBtn.y = stage.canvas.height / 2.5;
     stage.addChild(startBtn);
-    startBtn.x = stage.canvas.width-600;
-    startBtn.y = stage.canvas.height/2.5;
     startBtn.addEventListener('click',
         function(e){
             stage.removeChild(e.target);
@@ -66,7 +66,7 @@ function startGame() {
     hero = new createjs.Bitmap("img/bee.png");
     hero.width = 150;
     hero.height = 130;
-    hero.speed = 20;
+    hero.speed = 10;
     stage.addChild(hero);
 
     hero.x = stage.canvas.width/2.3;
@@ -76,7 +76,6 @@ function startGame() {
     window.addEventListener('keyup', fingerUp);
 
     addObsticles();
-
 }
 
 function addObsticles (){
@@ -99,7 +98,7 @@ function moveObsticles(){
     //    obsticles[i].y+=2;
     //}
 
-    for(i = length-1; i>=0; i--){
+    for(var i = length-1; i>=0; i--){
         obsticles[i].y += 2;
 
         if(obsticles[i].y > stage.canvas.height){
@@ -107,28 +106,21 @@ function moveObsticles(){
             obsticles[i].x = Math.floor(Math.random() * (stage.canvas.width - obsticles[i].width));
         }
 
-        //if(score >= length*score){
-        //    obsticles[i].y ++;
-        //}
+        if (score >= 8000) {
+            obsticles[i].y += 6;
+        } else if (score >= 6500) {
+            obsticles[i].y += 5;
+        } else if (score >= 5000) {
+            obsticles[i].y += 4;
+        } else if (score >= 3500) {
+                obsticles[i].y +=3;
+        } else if (score >= 2500){
+            obsticles[i].y +=2;
+        } else if (score >= 1000){
+            obsticles[i].y ++;
+        }
     }
-
-
-    //if (obsticles[i].y > 700){
-    //    stage.removeChild(obsticles[i]);
-    //   obsticles.splice(i, 1);
-    //   level+=0.25;
-    //}
-
-//stage.removeChild(obsticles[i]);
-//obsticles.splice (o, 1);
-//if (length === 0){
-//  level++;
-//  addObsticles();
-//}
-//break;
-
 }
-
 
 function fingerUp(e){
     if(e.keyCode === 37){
@@ -169,7 +161,7 @@ function checkCollisions(){
     for (var i=0; i<numOfObsticles; i++){
         if(hitTest(obsticles[i], hero)){
             gameIsRunning=false;
-            gameOverText = new createjs.Text("Game Over", "70px Helvetica", "black");
+            var gameOverText = new createjs.Text("Game Over", "70px Helvetica", "black");
             gameOverText.x = stage.canvas.width-600;
             gameOverText.y = stage.canvas.height/2.5;
             stage.addChild(gameOverText);
