@@ -94,10 +94,6 @@ function addObsticles (){
 function moveObsticles(){
     var length = obsticles.length;
 
-    //for (var i=0; i<numOfObsticles; i++){
-    //    obsticles[i].y+=2;
-    //}
-
     for(var i = length-1; i>=0; i--){
         obsticles[i].y += 2;
 
